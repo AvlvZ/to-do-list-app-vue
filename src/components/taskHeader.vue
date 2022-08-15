@@ -2,9 +2,7 @@
   <div class="tasks__header">
     <div class="task-header__body">
       <h1 class="header__date">
-        {{ weekday[date.getDay()] }},
-        {{ date.getDate() }}
-        {{ month[date.getMonth()] }}
+        {{ timeShaping }}
       </h1>
       <button @click="showPopup" class="new-task__btn">+</button>
     </div>
@@ -18,14 +16,12 @@
 
 <script>
 import AddTasks from "@/components/addTasks";
+import {format} from "date-fns";
 
 export default {
   components: {AddTasks},
   data() {
     return {
-      date: new Date(),
-      weekday: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-      month: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
       popupVisible: false,
     }
   },
@@ -38,6 +34,12 @@ export default {
     },
     clickSubmit(data) {
       this.$emit('clickSubmit', data)
+    }
+  },
+  computed: {
+    timeShaping() {
+      const dateFormat = format(new Date(), "eeee/dd/MMMM");
+      return dateFormat.replaceAll("/", " ");
     }
   }
 }
@@ -67,5 +69,17 @@ export default {
 
 .header__date {
   font-size: 28px;
+}
+
+@media screen and (max-width: 600px) {
+  .header__date {
+    font-size: 25px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header__date {
+    font-size: 20px;
+  }
 }
 </style>

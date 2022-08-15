@@ -2,27 +2,23 @@
   <div class="add-task">
     <div class="add-task__body">
       <div class="add-task__header">
-        <h2 class="add-task-header__item">Добавить задачу</h2>
+        <h2 class="add-task-header__item">Add a task</h2>
         <div class="add-task-header__close">
-          <i
-              class="material-icons add-task-header-close__item"
-              @click="closePopup"
-          >
-            close
-          </i>
+          <i class="material-icons add-task-header-close__item" @click="closePopup"> close </i>
         </div>
       </div>
       <div class="line"></div>
-      <form action="" class="form" v-on:submit.prevent>
-        <input type="text"
-               class="add-task__input"
-               placeholder="Введите новую задачу"
-               v-model="inputValue"
+      <form class="form" v-on:submit.prevent>
+        <input
+            type="text"
+            class="add-task__input"
+            placeholder="Enter a new task"
+            v-model="inputValue"
         />
         <input
             type="submit"
             class="add-task__submit"
-            value="Добавить"
+            value="Add"
             @click="clickSubmit"
         >
       </form>
@@ -42,9 +38,15 @@ export default {
     closePopup() {
       this.$emit('closePopup')
     },
-    clickSubmit() {
-      this.$emit('clickSubmit', this.inputValue);
-      this.inputValue = ""
+    clickSubmit(event) {
+      event.preventDefault();
+     if(this.inputValue !== "") {
+       this.$emit('clickSubmit', this.inputValue);
+       this.inputValue = ""
+       this.closePopup();
+     } else {
+       alert("Enter a task in the field!")
+     }
     }
   }
 }
@@ -73,7 +75,7 @@ export default {
   background: #5b75e3;
   margin-top: 65px;
   margin-right: 1px;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px;
   padding: 32px;
   z-index: 2;
 }
@@ -133,5 +135,35 @@ export default {
 
 .add-task-header-close__item {
   color: #fff;
+}
+
+
+
+@media screen and (max-width: 1200px) {
+  .add-task__body {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .add-task__body {
+    width: 80%;
+  }
+  .form {
+    display: block;
+  }
+  .add-task__input {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .add-task__submit {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .add-task__body {
+    width: 95%;
+  }
 }
 </style>

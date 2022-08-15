@@ -2,13 +2,10 @@
   <div id="app">
     <div class="container">
       <div class="tasks">
-        <taskHeader @clickSubmit="clickSubmit"/>
+        <taskHeader @clickSubmit="clickSubmit" />
         <div class="task-list">
-          <div class="country-post">Задач: {{posts.length}}</div>
-          <taskListItem
-              :posts="posts"
-              @remove="removePost"
-          />
+          <div class="country-post">Tasks: {{ getTotalCount }}</div>
+          <taskListItem :posts="posts" @markAsDone="markAsDone" @remove="removePost"/>
         </div>
       </div>
     </div>
@@ -32,37 +29,29 @@ export default {
       const count = this.posts.length
       const newPosts = {
         id: count + 1,
-        title: data
+        title: data,
+        completed: false
       }
-
-      this.posts.push(newPosts)
-
-      console.log(count);
-      console.log(data)
+      this.posts.push(newPosts);
     },
     removePost(post) {
-      this.posts = this.posts.filter(p => p.id !== post.id)
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    markAsDone(post) {
+      const newPost = {...post};
+      newPost.completed = !newPost.completed;
+      this.posts = this.posts.map((p) => (p.id === post.id ? newPost : p));
+    },
+  },
+  computed: {
+    getTotalCount() {
+      return this.posts.filter((p) => !p.completed).length;
     }
-  }
+  },
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
-* {
-  font-family: 'Manrope', sans-serif;
-  font-size: 20px;
-  color: #636369;
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #5b75e3;
-}
-
 #app {
   display: flex;
   justify-content: center;
@@ -93,5 +82,29 @@ body {
   color: #5b75e3;
   margin-top: 16px;
   margin-bottom: 32px;
+}
+
+@media screen and (max-width: 1200px) {
+  .tasks {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .tasks {
+    width: 80%;
+  }
+  .country-post {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .tasks {
+    width: 95%;
+  }
+  .country-post {
+    font-size: 16px;
+  }
 }
 </style>
